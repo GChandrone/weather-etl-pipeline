@@ -1,0 +1,38 @@
+name: Run Weather ETL Pipeline
+
+on:
+  schedule:
+    # Roda a cada 1 hora (no minuto 0)
+    - cron: '0 * * * *'
+  workflow_dispatch: # Permite rodar manualmente pelo painel do GitHub se quiser
+
+jobs:
+  run-etl:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: Instalar uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar Dependências
+        run: uv sync
+
+      - name: Executar Pipeline ETL
+        env:
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          API_KEY: ${{ secrets.API_KEY }}
+        run: uv run main.py

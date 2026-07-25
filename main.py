@@ -18,7 +18,8 @@ URL="https://api.openweathermap.org/data/2.5/weather"
 params = {
     "q": "Joinville,SC,BR",
     "units": "metric",
-    "appid": API_KEY
+    "appid": API_KEY,
+    "lang": "pt_br"
 }
 
 table_name = 'joinville_weather'
